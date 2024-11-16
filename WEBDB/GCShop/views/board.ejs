@@ -1,0 +1,37 @@
+<h1><%= boardtype_id[0].title %></h1>
+<table class="table table-bordered border-primary">
+    
+    <thead><td>작성자</td><td>제목</td><td>날짜</td></thead> 
+    <% if(boards && boards.length > 0) { %> 
+        <% for(let i=0;i<boards.length;i++) {%> 
+    <tr>
+                <td><%= boards[i].name %></td> <!--작성자-->
+                <td><a href="/board/detail/<%=boards[i].board_id%>/<%= pNum %>" style="text-decoration: none;"><%= boards[i].title %></a></td> <!--제목-->
+                <td><%= boards[i].date %></td> <!--날짜-->
+    </tr>   
+        <% }%> 
+    <% } else { %> 
+        <tr> 
+            <td colspan="3">현재 게시된 게시물이 없습니다.</td>
+        </tr>
+    <% } %> 
+</table>
+
+<% if(cls==='MNG' || (login && boardtype_id[0].write_YN === 'Y')) { %> 
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="/board/create/<%=boardtype_id[0].type_id%>"> <button type="button" class="btn btn-info me-md-2">글쓰기</button> </a>
+    </div>
+<% } %> 
+
+<!-- 페이지 번호 생성 코드  -->
+<% 
+    var j = 1;
+    while (j <= totalPages) {
+        if(j == pNum){ %>
+        <span style="font-weight : bold;"><%=j%></span> &nbsp;&nbsp;
+    <% } else { %>
+        <span><a href="/board/view/<%=boardtype_id[0].type_id%>/<%=j%>"><%=j%></a></span> &nbsp;&nbsp;
+    <% }
+    j++;
+} %>
+       

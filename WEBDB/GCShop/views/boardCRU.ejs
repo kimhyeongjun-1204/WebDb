@@ -1,0 +1,63 @@
+<div class="container">   
+
+    <% if(method !== 'detail') { %> 
+        <h2><%= boardtype_id[0].title %> <%= method === 'create' ? '작성':'수정' %></h2>
+    <% } %> 
+    <form action="<%= method === 'create' ? '/board/create_process':'/board/update_process' %>" method="post">
+        <input type="hidden" name="type_id" value="<%= method === 'create' ? boardtype_id[0].type_id : board[0].type_id %>"> <!--게시판 유형-->
+        <input type="hidden" name="board_id" value="<%= method === 'create' ? '' : board[0].board_id %>" />
+        <% if(method === 'create') { %> 
+            <input type="hidden" name="loginid" value="<%= loginid %>" />
+        <% } %> 
+
+        <!-- <input type="hidden" name="pNum" value="<%= method === 'create' ? '':pNum %>"> 페이지 번호 받기 -->
+
+        <div class="mb-3">
+            <label class="form-label" for="id">제목</label> 
+            <input class="form-control" type="text" name="title" style="width:300px;" 
+                   value="<%= method !== 'create' ? board[0].title : '' %>" 
+                   <%= method === 'detail' ? 'disabled' : '' %> />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label" for="id">작성자</label> 
+            <input class="form-control" type="text" name="author" style="width:300px;" disabled 
+                   value="<%= method === 'create' ? who:board[0].loginid %>" />
+        </div>
+        
+        <% if(method !== 'create') { %> 
+            <div class="mb-3">
+                <label class="form-label" for="id">작성일</label> 
+                <input class="form-control" type="text" name="date" style="width:300px;" disabled 
+                    value="<%= board[0].date %>" />
+            </div>
+        <% } %> 
+
+        <div class="mb-3">
+            <label class="form-label" for="id">내용</label> 
+            <textarea class="form-control" name="content" style="width:800px; height:200px;" 
+                      <%= method === 'detail' ? 'disabled' : '' %>><%= method !== 'create' ? board[0].content : '' %></textarea>
+        </div>
+        
+        <% if(method !== 'detail') { %> 
+            <% if(cls !== 'MNG') { %> 
+                <div class="mb-3">
+                    <label class="form-label" for="id">갱신삭제시 비밀번호</label> 
+                    <input class="form-control" type="text" name="password" style="width:300px;" />
+                </div>
+            <% } %> 
+            <button class="btn btn-outline-primary btn-sm" type="submit"><%= method === 'create' ? '생성':'수정' %></button>
+        <% } %> 
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="/board/view/<%= method === 'create' ? boardtype_id[0].type_id : board[0].type_id %>/1"> <button type="button" class="btn btn-info me-md-2">목록</button> </a>
+            <% if (method === 'detail' && (cls === 'MNG' || loginid === board[0].loginid)) { %>
+                <a href="/board/update/<%=board[0].board_id%>/<%=board[0].type_id%>/<%=pNum%>"> 
+                    <button type="button" class="btn btn-info me-md-2">수정</button> 
+                </a>
+                <a href="/board/delete/<%=board[0].board_id%>/<%=board[0].type_id%>/<%=pNum%>" onclick="if(confirm('정말로 삭제하시겠습니까?')==false) return false"> 
+                    <button type="button" class="btn btn-info me-md-2">삭제</button> 
+                </a>
+            <% } %> 
+        </div>
+    </form>
+</div>
